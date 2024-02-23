@@ -2,7 +2,7 @@ import BreadHeader from 'components/Breadcrumbs/BreadHeader'
 import DataNotFound from 'components/DataNotFound/DataNotFound'
 import Spinner from 'components/Spinner/Spinner'
 import { IMAGE_URL } from 'config'
-import { displayError, getError } from 'libs/getError'
+import { displayError } from 'libs/getError'
 import moment from 'moment'
 import { CiShoppingBasket } from 'react-icons/ci'
 import { useParams } from 'react-router-dom'
@@ -16,16 +16,15 @@ import Container from 'components/Common/Container'
 const OrderInfo = () => {
   const params = useParams()
   const collection_id = params.collection_id
-  const { data, isLoading, error, mutate } = orderApi.swrFetch(collection_id)
+  const { data, isLoading, mutate } = orderApi.swrFetch(collection_id)
 
-  if(error) return getError(error)
   return (
     <section className='my-2'>
       <BreadHeader path={'/home/orders'} icon={<CiShoppingBasket />} title="Order Info" subtitle={`#${collection_id}`} />
       
       <br />
       <Container>
-        {isLoading ? <Spinner /> : <Info orders={data.orders} billing={data.billing} mutate={mutate} />}
+        {isLoading ? <Spinner /> : <Info data={data} mutate={mutate} />}
       </Container>
     </section>
   )
@@ -34,7 +33,17 @@ const OrderInfo = () => {
 export default OrderInfo
 
 
-const Info = ({ orders, billing, mutate }) => {
+const Info = ({ data, mutate }) => {
+  const { orders, billing } = data
+  const changeStatus = async(order_id, value) => {
+    try {
+      const req = await orderApi.statusUpdate(order_id, { status: value })
+      if(req.status === 200) {
+        toast.success("status update")
+        mutate()
+      }
+    } catch (error) { displayError(error) }
+  }
 
   if(!orders || !Array.isArray(orders) || orders.length === 0) return <DataNotFound />;
   return (
@@ -74,7 +83,7 @@ const Info = ({ orders, billing, mutate }) => {
                     </td>
 
                     <td className='px-2 py-2 text-left align-baseline'>
-                      <OrderStatus  statusCode={item.status.toString()} order_id={item.id} mutate={mutate} />
+                      <OrderStatus  statusCode={item.status.toString()} order_id={item.id} onChange={changeStatus} />
                     </td>
                     <td className='px-2 py-2 text-left align-baseline'>{item.qty}</td>
                     <td className='px-2 py-2 text-left align-baseline w-[100px]'>Rs. {item.price}</td>
@@ -116,8 +125,7 @@ const Info = ({ orders, billing, mutate }) => {
 }
 
 Info.propTypes = {
-  orders: propTypes.array,
-  billing: propTypes.object,
+  data: propTypes.object,
   mutate: propTypes.func
 }
 
@@ -140,22 +148,7 @@ const colors = {
   "5" : "bg-primary",
 }
 
-const OrderStatus = ({ mutate, statusCode, order_id }) => {
-  
-  const changeStatus = async(_, value) => {
-    try {
-      const req = await orderApi.statusUpdate(order_id, { status: value })
-      if(req.status === 200) {
-        console.log(req)
-        toast.success("status update")
-        mutate((prev) => {
-          prev.orders.forEach(i => { if(i.status.toString() === statusCode) { i.status = value }})
-          return prev;
-        }, false)
-      }
-    } catch (error) { displayError(error) }
-  }
-
+const OrderStatus = ({ onChange, statusCode, order_id }) => {
   return (
     <div>
         <Selectbox 
@@ -163,7 +156,7 @@ const OrderStatus = ({ mutate, statusCode, order_id }) => {
           name="status"
           option={{ label: 'name', value: 'value'}} 
           value={statusCode} 
-          onChange={changeStatus} 
+          onChange={(_, value) => onChange(order_id, value)} 
           className={twMerge(`text-white rounded-md`, colors[statusCode])}
           divClassname={'border-none'}
         />
@@ -172,7 +165,7 @@ const OrderStatus = ({ mutate, statusCode, order_id }) => {
 }
 
 OrderStatus.propTypes = {
-  mutate: propTypes.func,
+  onChange: propTypes.func,
   statusCode: propTypes.string,
   order_id: propTypes.string
 }

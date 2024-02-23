@@ -151,7 +151,7 @@ const OrderStatus = ({ mutate, statusCode, order_id }) => {
         mutate((prev) => {
           prev.orders.forEach(i => { if(i.status.toString() === statusCode) { i.status = value }})
           return prev;
-        })
+        }, false)
       }
     } catch (error) { displayError(error) }
   }

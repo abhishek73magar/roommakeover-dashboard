@@ -1,8 +1,14 @@
 import Navigation from "components/Navigation/Navigation"
-import { Suspense } from "react"
+import { Suspense, useEffect } from "react"
 import { Outlet } from "react-router-dom"
 
 const Header = () => {
+
+  useEffect(() => {
+    
+  }, [])
+
+
   return (
     <>
       <Navigation />

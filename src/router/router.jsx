@@ -30,12 +30,15 @@ import Profile from "pages/Setting/Profile/Profile";
 import CreateProfile from "pages/Setting/Profile/CreateProfile";
 import UpdateProfile from "pages/Setting/Profile/UpdateProfile";
 import Customization from "pages/Products/Customization/Customization";
+import Login from "pages/Login/Login";
+import { auth } from "libs/auth";
 
 
 export const router = createHashRouter([
   {
     path: "/",
     element: <Header />,
+    loader: auth,
     children: [
       { 
         path: "/home",
@@ -110,5 +113,9 @@ export const router = createHashRouter([
         ]
       },
     ]
+  }, {
+    path: "/login",
+    loader: auth,
+    element: <Login />
   }
 ])

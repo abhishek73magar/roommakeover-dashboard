@@ -24,6 +24,9 @@ export const diyProductApi = { ...crud('/api/admin/diy-product') }
 export const blogApi = { ...crud("/api/admin/blog") }
 export const orderApi = { ...crud('/api/admin/order') }
 export const sliderApi = { ...crud('/api/admin/slider')}
-export const adminApi = { ...crud("/api/admin/admin") }
+export const adminApi = { 
+  ...crud("/api/admin/admin"),
+  login: (data, option) => post('/api/admin/login', data, option) 
+}
 export const customizationApi = { ...crud("/api/admin/customization-product") }
 export const customerApi = { ...crud("/api/admin/customer")}

@@ -1,31 +1,29 @@
 import toast from "react-hot-toast";
+import { REMOVEAUTH_TOKEN } from "./jwtToken";
 
-export const displayError = (error, path) => {
+const noRedirect = ['/api/admin/login']
+
+export const displayError = (error) => {
   if(error?.response){
-    if(error.response.status === 401){
-      toast.error(error.response.data.message)
-      if(path !== 'login') window.location.reload(true)
-      return;
-    }
     if(typeof error.response.data === "object" ) { toast.error(JSON.stringify(error.response.data)) }
     else { toast.error(error.response.data) }
-  } else {  toast.error(JSON.stringify(error.response.data)) }
+  } else {  toast.error(JSON.stringify(error)) }
 }
 
-export const getError = (error, path) => {
+export const getError = (error) => {
   if(error?.response){
-    if(error.response.status === 401) { 
-      if(path !== 'login') window.location.reload(true)
-      return error.response.data.message 
-    }
     if(typeof error.response.data === "object" ) { return JSON.stringify(error.response.data) }
     else return error.response.data
   } else { console.log(error); return error } 
 }
 
-export const checkError = (error, path) => {
+export const checkError = (error) => {
   if(error?.response){
-    if(error.response.status === 401 && path !== 'login') window.location.reload(true)
+    const { url } = error.response.config
+    if(error.response.status === 401 && !noRedirect.includes(url)) {
+      REMOVEAUTH_TOKEN()
+      console.log(error)
+    }
   } 
   return error
 }

@@ -4,9 +4,17 @@ import Notification from './Notification'
 import Chat from './Chat'
 import Subnavbar from './Subnavbar'
 import { twMerge } from 'tailwind-merge'
+import { CiLogout } from "react-icons/ci";
+import { REMOVEAUTH_TOKEN } from 'libs/jwtToken'
 
 const commonClassName = 'mx-auto w-[95%] xl:w-[75%]'
 const Navigation = () => {
+
+  const __logOut = () => {
+    REMOVEAUTH_TOKEN()
+    return window.location.reload(true)
+  }
+
   return (
     <header className='text-secondary'>
       <nav className=" bg-primary py-2">
@@ -18,6 +26,7 @@ const Navigation = () => {
             <Mail />
             <Notification />
             <Chat />
+            <CiLogout className='text-xl text-white cursor-pointer hover:scale-110' title="Log Out" onClick={__logOut} />
           </div>
         </div>
       </nav>

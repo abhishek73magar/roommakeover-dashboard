@@ -4,7 +4,7 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 const Notification = () => {
   return (
     <div>
-      <PopIcon icon={<IoIosNotificationsOutline />} value={5} />
+      <PopIcon icon={<IoIosNotificationsOutline />} value={5} title="Notification" />
     </div>
   )
 }

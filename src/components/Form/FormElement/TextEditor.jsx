@@ -53,7 +53,8 @@ const TextEditor = ({ label, className, labelClassName, mediaEnable, ...editorPr
 
   const addImages = (url) => {
     const range = quillRef.current.editor.getSelection();
-    return quillRef.current.editor.insertEmbed(range.index, "image", url);
+    if(range.index) return quillRef.current.editor.insertEmbed(range.index, "image", url);
+    return null
   };
 
   useEffect(() => {

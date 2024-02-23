@@ -1,5 +1,4 @@
-import { get, post, remove, update } from "./apiMethod"
-import fetchData from "./fetchData"
+import { fetchData, get, post, remove, update } from "./apiMethod"
 
 const crud = (url) => ({
   get: (option) => get(url, option),
@@ -30,3 +29,4 @@ export const adminApi = {
 }
 export const customizationApi = { ...crud("/api/admin/customization-product") }
 export const customerApi = { ...crud("/api/admin/customer")}
+export const mediaApi = { ...crud('/api/admin/media')}

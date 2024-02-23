@@ -3,43 +3,34 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import defaultImage from 'assets/default.png'
 import Spinner from "components/Spinner/Spinner";
-import fetchData from "libs/fetchData";
-import axios from "libs/axios";
 import { SlCloudUpload } from "react-icons/sl";
 import Image from "components/Image/Image";
 import propTypes from 'prop-types'
+import { mediaApi } from "libs/api";
+import { getError } from "libs/getError";
 
 const MediaList = ({ select, setMedia }) => {
   const [imgList, setImgList] = useState([]);
-  const { data, isLoading, error, mutate } = fetchData('/api/admin/media')
+  const { data, isLoading, error, mutate } = mediaApi.swrFetch()
 
   const __onChange = (e) => {
     const files = e.target.files;
     return setImgList(Object.values(files).map((file) => file));
   };
 
-  const __uploadImages = (files) => {
-      return axios
-        .post("/api/admin/media", files)
-        .then((res) => {
-          console.log(res)
-          setImgList([]);
-          mutate(prev => ([...prev, res.data]), false)
-          return "Image upload successfully"
-        })
-        .catch((err) => err);
-  };
 
   const __upload = useCallback(async () => {
     const formData = new FormData();
-    imgList.forEach((file) => {
-      formData.append("media-images", file);
-    });
-    return toast.promise(__uploadImages(formData), {
-      loading: "Image uploading ...",
-      success: (msg) => msg,
-      error: (err) => err,
-    });
+    imgList.forEach((file) => { formData.append("media-images", file) });
+    const res = await toast.promise(mediaApi.post(formData), {
+        loading: "Image uploading ...",
+        success: () => "Image upload successfully",
+        error: (err) => getError(err),
+      });
+      console.log(res)
+      setImgList([]);
+      mutate(prev => ([...prev, res.data]), false)
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imgList]);
 
@@ -49,15 +40,14 @@ const MediaList = ({ select, setMedia }) => {
 
   const __removeImage = async (id) => {
     try {
-      if (window.confirm("Are you sure?")) {
-        const req = axios.delete("/api/admin/media/" + id).then(() => mutate(prev => prev.filter(item => item.id !== id)))
-        toast.promise(req, 
-          {
-          loading: "removeing media ...",
-          success: "Removed successfully",
-          error: "Somthing is wrong !",
-        })
-      }
+      const check = window.confirm("Are you sure?")
+      if(!check) return;
+      await toast.promise(mediaApi.remove(id), {
+        loading: "removeing media ...",
+        success: "Removed successfully",
+        error: "Somthing is wrong !",
+      })
+      mutate(prev => prev.filter(item => item.id !== id), false)
     } catch (error) {
       return console.log(error);
     }
@@ -116,12 +106,8 @@ const MediaList = ({ select, setMedia }) => {
 };
 
 MediaList.propTypes = {
-  select: propTypes.bool,
+  select: propTypes.func,
   setMedia: propTypes.func
-}
-
-MediaList.defaultProps = {
-  select: false
 }
 
 export default MediaList;

@@ -18,11 +18,12 @@ export const getError = (error) => {
 }
 
 export const checkError = (error) => {
+  console.log(error)
   if(error?.response){
     const { url } = error.response.config
     if(error.response.status === 401 && !noRedirect.includes(url)) {
       REMOVEAUTH_TOKEN()
-      console.log(error)
+      window.location.reload(true)
     }
   } 
   return error

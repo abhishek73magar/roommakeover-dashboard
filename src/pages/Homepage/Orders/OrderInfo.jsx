@@ -2,7 +2,6 @@ import BreadHeader from 'components/Breadcrumbs/BreadHeader'
 import DataNotFound from 'components/DataNotFound/DataNotFound'
 import Spinner from 'components/Spinner/Spinner'
 import { IMAGE_URL } from 'config'
-import axios from 'libs/axios'
 import { displayError, getError } from 'libs/getError'
 import moment from 'moment'
 import { CiShoppingBasket } from 'react-icons/ci'
@@ -42,7 +41,7 @@ const Info = ({ orders, billing, mutate }) => {
     <article className=''>
       <div className="text-sm text-left mb-2">{moment(orders[0].date).format('DD MMM YYYY || hh:mm a')}</div>
       <div className='grid md:grid-cols-7 gap-3'>
-        <div className="col-span-5 overflow-auto">
+        <div className="col-span-5">
           <table className='w-full text-sm'>
             <thead>
               <tr className=''>
@@ -143,10 +142,11 @@ const colors = {
 
 const OrderStatus = ({ mutate, statusCode, order_id }) => {
   
-  const changeStatus = async(value) => {
+  const changeStatus = async(_, value) => {
     try {
-      const req = await axios.patch("/api/admin/order?order_id=" + order_id, { status: value })
+      const req = await orderApi.statusUpdate(order_id, { status: value })
       if(req.status === 200) {
+        console.log(req)
         toast.success("status update")
         mutate((prev) => {
           prev.orders.forEach(i => { if(i.status.toString() === statusCode) { i.status = value }})
@@ -160,6 +160,7 @@ const OrderStatus = ({ mutate, statusCode, order_id }) => {
     <div>
         <Selectbox 
           list={statusList} 
+          name="status"
           option={{ label: 'name', value: 'value'}} 
           value={statusCode} 
           onChange={changeStatus} 

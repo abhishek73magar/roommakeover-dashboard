@@ -21,7 +21,10 @@ export const hobbieProductApi = { ...crud('/api/admin/hobbie-product') }
 export const hobbieApi = { ...crud('/api/admin/hobbie') }
 export const diyProductApi = { ...crud('/api/admin/diy-product') }
 export const blogApi = { ...crud("/api/admin/blog") }
-export const orderApi = { ...crud('/api/admin/order') }
+export const orderApi = { 
+  ...crud('/api/admin/order'),
+  statusUpdate: (id, data) => update(`/api/admin/order?order_id=${id}`, data) 
+}
 export const sliderApi = { ...crud('/api/admin/slider')}
 export const adminApi = { 
   ...crud("/api/admin/admin"),

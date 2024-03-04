@@ -28,6 +28,7 @@ const subLink = [
 
   { name: "Slider", path: '', subpath: '/pages/slider', parent: '/pages'},
   { name: "Banner", path: '/banner', subpath: '/pages/slider', parent: '/pages'},
+  { name: "Media", path: '/media', subpath: '/pages/media', parent: '/pages'},
 
   { name: "Profile", path: '', subpath: "/setting/profile", parent: "/setting"},
   { name: "Order Email", path: '/order-email', parent: "/setting"},

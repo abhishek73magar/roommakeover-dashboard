@@ -32,6 +32,8 @@ import UpdateProfile from "pages/Setting/Profile/UpdateProfile";
 import Customization from "pages/Products/Customization/Customization";
 import Login from "pages/Login/Login";
 import { auth } from "libs/auth";
+import Media from "pages/Pages/Media/Media";
+import AddMedia from "pages/Pages/Media/AddMedia";
 
 
 export const router = createHashRouter([
@@ -100,6 +102,8 @@ export const router = createHashRouter([
           { path: "", element: <Slider /> },
           { path: 'slider/create', element: <CreateSlider />},
           { path: 'banner', element: <Pages />},
+          { path: 'media', element: <Media />},
+          { path: 'media/add', element: <AddMedia />},
           
         ]
       },

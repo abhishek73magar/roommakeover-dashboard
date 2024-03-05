@@ -25,6 +25,7 @@ export const orderApi = {
   ...crud('/api/admin/order'),
   statusUpdate: (id, data) => update(`/api/admin/order?order_id=${id}`, data) 
 }
+
 export const sliderApi = { ...crud('/api/admin/slider')}
 export const adminApi = { 
   ...crud("/api/admin/admin"),
@@ -33,3 +34,7 @@ export const adminApi = {
 export const customizationApi = { ...crud("/api/admin/customization-product") }
 export const customerApi = { ...crud("/api/admin/customer")}
 export const mediaApi = { ...crud('/api/admin/media')}
+
+export const infoApi = {
+  home: () => fetchData('/api/admin/info/home')
+}

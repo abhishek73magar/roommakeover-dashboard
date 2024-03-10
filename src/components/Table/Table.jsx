@@ -17,11 +17,6 @@ import DataNotFound from 'components/DataNotFound/DataNotFound';
 const Table = ({ colnames, data, searchBy, isLoading, onClick, slug, edit, disableEdit, onDelete }) => {
   const [search, setSearch] = useState("")
 
-  const __searchChange = (e) => {
-    const value = e.target.value.toLowerCase();
-    setSearch(value)
-  }
-
   const __filterBy = (item) => {
     if(search === '' || !searchBy) return true;
     if(Array.isArray(searchBy)){
@@ -34,7 +29,7 @@ const Table = ({ colnames, data, searchBy, isLoading, onClick, slug, edit, disab
     <div>
       <div className='flex flex-row justify-between items-center gap-4 px-2 py-2'>
         <div></div>
-        <Searchbox value={search} onChange={__searchChange} />
+        <Searchbox setValue={setSearch} />
       </div>
       <div className='overflow-auto'>
         <table className='text-sm w-full text-left'>
@@ -59,7 +54,7 @@ const Table = ({ colnames, data, searchBy, isLoading, onClick, slug, edit, disab
                         value={item[key]}
                         type={type}
                         slug={slug}
-                        edit={edit}
+                        edit={item[edit]}
                         disableEdit={disableEdit}
                         onDelete={onDelete}
                       />

@@ -18,10 +18,6 @@ import TableDataType from './TableDataType';
 
 const ProductTable = ({ colnames, data, isLoading, searchBy, onClick, onDelete, slug, edit, disableEdit }) => {
   const [search, setSearch] = useState("")
-  const __searchChange = (e) => {
-    const value = e.target.value.toLowerCase();
-    setSearch(value)
-  }
 
   const __filterBy = (item) => {
     if(search === '' || !searchBy) return true;
@@ -35,7 +31,7 @@ const ProductTable = ({ colnames, data, isLoading, searchBy, onClick, onDelete, 
     <div className=''>
       <div className='flex flex-row justify-between items-center gap-4 px-2 py-2'>
         <div></div>
-        <Searchbox value={search} onChange={__searchChange} />
+        <Searchbox setValue={setSearch}  />
       </div>
       <div className='overflow-auto'>
         <table className='text-sm w-full text-left'>
@@ -62,7 +58,7 @@ const ProductTable = ({ colnames, data, isLoading, searchBy, onClick, onDelete, 
                         value={item[key]}
                         type={type}
                         slug={slug}
-                        edit={edit}
+                        edit={item[edit]}
                         disableEdit={disableEdit}
                         onDelete={onDelete}
                       />

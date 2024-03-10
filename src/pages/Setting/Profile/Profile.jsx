@@ -9,7 +9,7 @@ import { PiUserLight } from "react-icons/pi";
 const colnames = [
   { name: "Fullname", key: "fullname"},
   { name: "Email", key: "email"},
-  { name: "Status", key: "status"},
+  { name: "Status", key: "status", type: "access-status"},
   { name: "action", key: '', type: 'action'}
 ]
 

@@ -12,11 +12,12 @@ import { twMerge } from 'tailwind-merge'
 import { orderApi } from 'libs/api'
 import propTypes from 'prop-types'
 import Container from 'components/Common/Container'
+import { useState } from 'react'
 
 const OrderInfo = () => {
   const params = useParams()
   const collection_id = params.collection_id
-  const { data, isLoading, mutate } = orderApi.swrFetch(collection_id)
+  const { data, isLoading } = orderApi.swrFetch(collection_id)
 
   return (
     <section className='my-2'>
@@ -24,7 +25,7 @@ const OrderInfo = () => {
       
       <br />
       <Container>
-        {isLoading ? <Spinner /> : <Info data={data} mutate={mutate} />}
+        {isLoading ? <Spinner /> : <Info data={data}  />}
       </Container>
     </section>
   )
@@ -33,18 +34,21 @@ const OrderInfo = () => {
 export default OrderInfo
 
 
-const Info = ({ data, mutate }) => {
-  const { orders, billing } = data
+const Info = ({ data }) => {
+  let { orders: orderList, billing } = data
+  const [orders, setOrders] = useState(orderList|| [])
   const changeStatus = async(order_id, value) => {
     try {
       const req = await orderApi.statusUpdate(order_id, { status: value })
       if(req.status === 200) {
         toast.success("status update")
-        mutate()
+        setOrders((prev) => prev.map((item) => {
+          if(item.id === order_id) item.status = value
+          return item;
+        }) )
       }
     } catch (error) { displayError(error) }
   }
-
   if(!orders || !Array.isArray(orders) || orders.length === 0) return <DataNotFound />;
   return (
     <article className=''>
@@ -63,7 +67,9 @@ const Info = ({ data, mutate }) => {
             </thead>
 
             <tbody>
-              {orders.sort((a, b) => a.title.localeCompare(b.title)).map((item, indx) => {
+              {orders
+              .sort((a, b) => a.title.localeCompare(b.title))
+              .map((item, indx) => {
                 return (
                   <tr key={indx} className='even:bg-slate-100 hover:bg-slate-50 cursor-pointer'>
                     <td className='px-2 py-2 text-left'>
@@ -126,7 +132,6 @@ const Info = ({ data, mutate }) => {
 
 Info.propTypes = {
   data: propTypes.object,
-  mutate: propTypes.func
 }
 
 

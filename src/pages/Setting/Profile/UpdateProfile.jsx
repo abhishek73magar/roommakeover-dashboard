@@ -33,7 +33,7 @@ const UpdateProfile = () => {
       
       <br />
       <Container>
-        {isLoading ? <Spinner /> : <ProfileForm onSubmit={__updateProfile} dataObj={data}  type="update" />}
+        {isLoading ? <Spinner /> : <ProfileForm onSubmit={__updateProfile} dataObj={data} type="update" />}
       </Container>
     </section>
   )

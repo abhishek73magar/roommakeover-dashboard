@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge';
 import { MdCheck } from "react-icons/md";
 import PropTypes from 'prop-types'
 
-const Selectbox = ({ list, option, label, name, value, onChange, className, divClassname}) => {
+const Selectbox = ({ list, option, label, name, value, onChange, error, className, divClassname }) => {
   const [toggle, setToggle] = useState(false)
   const selectRef = useRef()
 
@@ -22,6 +22,7 @@ const Selectbox = ({ list, option, label, name, value, onChange, className, divC
   return (
       <div className='flex flex-col justify-start items-start gap-0.5'>
         {label && <div className='text-sm font-semibold' onClick={() => setToggle(!toggle)}>{label}</div>}
+       {error && error !== '' && <span className='text-xs text-red-500'>{error} *</span>}
         <div className={twMerge('relative w-full border', divClassname)} ref={selectRef}>
           <button 
             type='button'
@@ -63,11 +64,12 @@ Selectbox.propTypes = {
   value: PropTypes.string || PropTypes.number,
   onChange: PropTypes.func,
   className: PropTypes.string,
-  divClassname: PropTypes.string
+  divClassname: PropTypes.string,
+  error: PropTypes.string,
 }
 
 Selectbox.defaultProps = {
-  list: []
+  list: [],
 }
 
 export default Selectbox

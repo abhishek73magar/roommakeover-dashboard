@@ -1,5 +1,5 @@
 import Image from "components/Image/Image";
-import { OrderStatusButton, StatusButton } from "components/Table/TableButtons";
+import { AccessStatusButton, OrderStatusButton, StatusButton } from "components/Table/TableButtons";
 import moment from "moment";
 import { CiEdit, CiTrash } from "react-icons/ci";
 import { Link } from "react-router-dom";
@@ -24,6 +24,7 @@ const TableDataType = ({ value, type, disableEdit, slug, edit, onDelete }) => {
   if(type === 'truncate') return <td className="p-3 truncate max-w-[200px]">{value}</td>
   if(type === 'heading') return <td  className='p-3 align-baseline font-semibold'>{value}</td>
   if(type === 'status') return <td  className='p-3 align-baseline w-[100px]'><StatusButton statusCode={Number(value)} /></td>
+  if(type === 'access-status') return <td  className='p-3 align-baseline w-[100px]'><AccessStatusButton statusCode={Number(value)} /></td>
   if(type === 'order-status') return <td  className='p-3 align-baseline w-[100px]'><OrderStatusButton statusCode={Number(value)} /></td>
   if(type === 'image') {
     return (

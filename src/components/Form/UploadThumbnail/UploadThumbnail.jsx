@@ -6,7 +6,7 @@ const UploadThumbnail = ({ src, description, setThumbnail, text  }) => {
  
   return (
     <div className="flex flex-col justify-center items-center gap-2">
-      <input type='file' id="upload-thumbnail" className="hidden" onChange={(e) => setThumbnail(e.target.files[0])} />
+      <input type='file' id="upload-thumbnail" className="hidden" accept="image/*" onChange={(e) => setThumbnail(e.target.files[0])} />
       <label htmlFor="upload-thumbnail" className="border w-full cursor-pointer hover:opacity-85">
         <Image src={src} className={'h-[250px] object-cover object-center'} />
       </label>

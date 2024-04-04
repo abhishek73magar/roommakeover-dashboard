@@ -11,106 +11,142 @@ import ColorPicker from './ColorPicker';
 import propTypes from 'prop-types'
 import { categoryApi } from 'libs/api';
 import { onSale, statusList, stockStatus } from 'utils/selectOption';
+import { useForm } from 'react-hook-form';
+import { zodError } from 'libs/zodError';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { productFormSchema } from 'utils/formSchema';
 
 
 
-const numberOnly = ["price", "quantity"]
-const checkbox = ['is_discount']
+// const numberOnly = ["price", "quantity"]
+// const checkbox = ['is_discount']
 
 const ProductForm = ({ data, type, imageList, onSubmit }) => {
   const { data: cateogry, isLoading } = categoryApi.swrFetch()
-  const [product, setProduct] = useState({ ...data })
+  const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm({ defaultValues: data, resolver: zodResolver(productFormSchema) })
+  const [colors, setColors] = useState(data.colors || [])
   const [formImage, setFormImage] = useState([])
 
 
-  const __onSubmit = (e) => {
-    e.preventDefault();
+  const __onSubmit = (product) => {
     const formData = new FormData()
     Object.keys(product).forEach((name) => {
-      let value = product[name] === 'null' ? null : product[name]
-      if(name === 'colors') value = JSON.stringify(value)
+      if(name === 'colors') return;
+      let value = product[name] === 'null' || product[name] === '' ? null : product[name]
       formData.append(name, value)
     })
 
+    formData.append('colors', JSON.stringify(colors))
     formImage.forEach((file) => formData.append('product-images', file))
 
     return onSubmit(formData).then((res) => {
-        if(type === 'update') setProduct((prev) => ({ ...prev, ...res.response })) 
-        else setProduct({ ...productObj })
+      if(res){
+        if(type === 'update') {
+          reset({ ...productObj, ...res.response }) 
+          setColors(res.response.colors)
+        }
+        else {
+          reset(productObj)
+          setColors([])
+        }
         
         setFormImage([])
         if(formImage.length > 0 && imageList && res && res.images) imageList.mutate((prev) => [...prev, res.images], false)
+      }
+
       }).catch(console.error)
   }
 
-  const __inputHandle = (e) => {
-    const name = e.target.name
-    const value = e.target.value
-    if(numberOnly.includes(name) && isNaN(value)){ return }
-    if(checkbox.includes(name)){
-      const checked = e.target.checked;
-      return setProduct((prev) => ({ ...prev, [name]: checked }))
-    }
 
-    setProduct((prev) => ({ ...prev, [name]: value}))
-
-  }
 
   const __selectHandle = (name, value) => {
-    setProduct((prev) => ({ ...prev, [name]: value }))
+    setValue(name, value)
   }
 
   return (
     <div>
-      <form method="post" onSubmit={__onSubmit} encType='multipart/form-data'>
+      <form method="post" onSubmit={handleSubmit(__onSubmit)} encType='multipart/form-data'>
      
         <div className='grid md:grid-cols-7 gap-2'>
           <div className='col-span-5 flex flex-col gap-2 xl:grid xl:grid-cols-2 xl:gap-4'>
-            <Inputbox label={'Product Title'} name="title" value={product.title || ''} onChange={__inputHandle} placeholder="Product Title" />
+            <Inputbox 
+              error={zodError(errors, 'title')}
+              label={'Product Title'} 
+              register={register('title')} 
+              placeholder="Product Title" 
+            />
             
-            <div className={`grid ${product.is_discount ? "grid-cols-2" : "grid-cols-1"} gap-2`}>
+            <div className={`grid ${watch('is_discount') ? "grid-cols-2" : "grid-cols-1"} gap-2`}>
               <Inputbox 
+                error={zodError(errors, 'price')}
+                register={register("price", { valueAsNumber: true })}
                 label={
                   <span className='flex flex-row gap-2 justify-center items-center'>
                     Price 
-                    <input type='checkbox' name="is_discount" onChange={__inputHandle} id='discount' className=' rounded accent-current focus:ring-current' />
+                    <input 
+                      type='checkbox' 
+                      {...register("is_discount")} 
+                      id='discount' 
+                      className=' rounded accent-current focus:ring-current' 
+                    />
                     <label htmlFor="discount" className='font-normal text-xs cursor-pointer'> Discount? </label>
                   </span>} 
-                name="price" 
-                value={product.price || ''} 
-                onChange={__inputHandle} 
                 placeholder="Price" 
               />
-              {product.is_discount && <Inputbox label={'Discount Price'} name="new_price" value={product.new_price || ''} onChange={__inputHandle} placeholder="New Price (is discount)" />}
+              {watch('is_discount') && 
+                <Inputbox 
+                  error={zodError(errors, 'new_price')}
+                  label={'Discount Price'} 
+                  register={register("new_price", { valueAsNumber: true })} 
+                  placeholder="New Price (is discount)" 
+                />}
             </div>
 
-            <Inputbox label={'Quantity'} name="quantity" value={product.quantity || ''} onChange={__inputHandle} placeholder="Quantity" />
+            <Inputbox 
+              error={zodError(errors, 'quantity')} 
+              label={'Quantity'} 
+              register={register("quantity", { valueAsNumber: true })} 
+              placeholder="Quantity" 
+            />
             <Selectbox 
               name="category_id"
               onChange={__selectHandle}
               label={"Category"}
               list={isLoading ? [] : [{ name: 'Select Category', value: '' }, ...cateogry || []]} 
               option={{ label: "name", value: 'id'}}  
-              value={product.category_id || ''}
+              value={watch('category_id')}
             />
             
             <ColorPicker 
-              colors={product.colors || []} 
-              setColors={setProduct} 
+              colors={colors || []} 
+              setColors={setColors} 
             />
 
-            <Textbox rows={4} label="Short Description" name="short_description" value={product.short_description || ''} onChange={__inputHandle} className={'h-full'} placeholder="Short Description"  />
+            <Textbox 
+              rows={4} 
+              label="Short Description" 
+              register={register('short_description')}  
+              className={'h-full'} 
+              placeholder="Short Description"  
+            />
 
             <div className="col-span-2">
-              <TextEditor mediaEnable={true} value={product.more_info || ''} onChange={(value) => setProduct((prev) => ({ ...prev, 'more_info': value }))} label="More Info"  />
+              <TextEditor 
+                mediaEnable={true} 
+                name="more_info" 
+                value={watch("more_info")} 
+                onChange={__selectHandle} 
+                label="More Info"  
+              />
             </div>
 
 
             <div className='col-span-2'>
               <Selectbox 
+                error={zodError(errors, 'stock_status')}
                 name="stock_status"
                 onChange={__selectHandle}
-                value={product.stock_status || ''}
+                value={watch('stock_status')}
                 label={"Stock"}
                 list={stockStatus} 
                 option={{ label: "name", value: 'value'}}  
@@ -118,18 +154,20 @@ const ProductForm = ({ data, type, imageList, onSubmit }) => {
             </div>
 
             <Selectbox 
+              error={zodError(errors, 'on_sale')}
               name="on_sale"
               onChange={__selectHandle}
-              value={product.on_sale || ''}
+              value={watch('on_sale')}
               label={"On Sale"}
               list={onSale} 
               option={{ label: "name", value: 'value'}}  
             />
 
             <Selectbox 
+              error={zodError(errors, 'status')}
               name="status"
               onChange={__selectHandle}
-              value={product.status || '2'}
+              value={watch('status')}
               label={"Status"}
               list={statusList} 
               option={{ label: "name", value: 'value'}}  
@@ -159,7 +197,8 @@ ProductForm.propTypes = {
 ProductForm.defaultProps = {
   data: productObj,
   type: 'new',
-  onSubmit: () => {}
+  onSubmit: () => {},
+  imageList: {},
 }
 
 export default ProductForm

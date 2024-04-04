@@ -19,8 +19,7 @@ const Homepage = () => {
       <article className="flex flex-row justify-start item-center gap-5 w-full flex-wrap">
         {homeList.map((item, indx) => {
           let value = 'None'
-          if(!isLoading) value = data[item.key]
-
+          if(!isLoading && data) value = data[item.key]
           return <HomepageCard key={indx} name={item.name} value={value} icon={item.icon}  />
         })}
       </article>

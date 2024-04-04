@@ -5,7 +5,7 @@ import { twMerge } from "tailwind-merge";
 import propTypes from 'prop-types'
 import MediaList from "./Media/MediaList";
 
-const TextEditor = ({ label, className, labelClassName, mediaEnable, ...editorProps }) => {
+const TextEditor = ({ label, className, name, labelClassName, mediaEnable, onChange, ...editorProps }) => {
   const quillRef = useRef(null);
   const mediaRef = useRef(null);
   const [media, setMedia] = useState(false);
@@ -94,6 +94,7 @@ const TextEditor = ({ label, className, labelClassName, mediaEnable, ...editorPr
             theme="snow"
             modules={modules}
             formats={formats}
+            onChange={(value) => onChange(name, value)}
             {...editorProps}
             className={twMerge("", className)}
           />
@@ -108,10 +109,13 @@ TextEditor.propTypes = {
   className: propTypes.string,
   labelClassName: propTypes.string,
   mediaEnable: propTypes.bool,
+  onChange: propTypes.func,
+  name: propTypes.string
 }
 
 TextEditor.defaultProps = {
-  mediaEnable: false
+  mediaEnable: false,
+  onChange: () => {}
 }
 
 export default TextEditor;

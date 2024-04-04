@@ -75,7 +75,7 @@ const OrderStatusList = {
 }
 
 const colors = {
-  "0" : "bg-red-500",
+  "0" : "bg-red-500 text-white",
   "1" : "bg-slate-200",
   "2" : "bg-blue-400 text-white",
   "3" : "bg-blue-600 text-white",
@@ -84,7 +84,6 @@ const colors = {
 }
 
 export const OrderStatusButton = ({ statusCode }) => {
-
   return (
     <div className={twMerge(`py-2 px-2 border text-center text-xs rounded-md`, colors[statusCode || 0])}>
       {OrderStatusList[statusCode]}

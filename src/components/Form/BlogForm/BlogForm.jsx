@@ -1,4 +1,3 @@
-import { useState } from "react"
 import UploadThumbnail from "../UploadThumbnail/UploadThumbnail"
 import Inputbox from "../FormElement/Inputbox"
 import TextEditor from "../FormElement/TextEditor"
@@ -9,45 +8,53 @@ import { AiOutlineSave } from "react-icons/ai"
 import propTypes from 'prop-types'
 import Selectbox from "../FormElement/Selectbox"
 import { statusList } from "utils/selectOption"
+import { useForm } from "react-hook-form"
+import { zodError } from "libs/zodError"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { blogFormSchema } from "utils/formSchema"
 
-const numbers = ['index']
 const BlogForm = ({ onSubmit, type, objData }) => {
-  const [data, setData] = useState({ ...objData })
+  const { register, handleSubmit, formState: { errors }, setValue, watch, reset } = useForm({ defaultValues: objData, mode: 'onChange', resolver: zodResolver(blogFormSchema) })
 
-  const __inputHandle = (e) => {
-    const { name, value } = e.target;
-    if(numbers.includes(name) && isNaN(value)) return;
-    console.log(isNaN(value), numbers.includes(name))
-    setData((prev) => ({ ...prev, [name]: value}))
-  }
-
-  const __selectHandle = (name, value) => {
-    setData((prev) => ({ ...prev, [name]: value }))
-  }
-  const __onSubmit = (e) => {
-    e.preventDefault()
+  const __selectHandle = (name, value) => { setValue(name, value) }
+  const __onSubmit = (formdata) => {
+    // console.log(formdata)
+    // return;
     const formData = new FormData();
-    Object.keys(data).forEach((name) => {
-      formData.append(name, data[name])
+    Object.keys(formdata).forEach((name) => {
+      formData.append(name, formdata[name])
     })
     return onSubmit(formData).then((response) => {
-      if(type === 'upate' && response) setData((prev) => ({...prev, ...response }))
-      else if(type === 'new') { setData((prev) => ({ ...prev, ...objData}))} 
+      if(type === 'upate' && response) reset({...blogObj, ...response })
+      else if(type === 'new') { reset(blogObj)} 
     }).catch(console.error)
   }
   return (
     <div>
-      <form method="post" encType="multipart/form-data" onSubmit={__onSubmit}>
+      <form method="post" encType="multipart/form-data" onSubmit={handleSubmit(__onSubmit)}>
         <div className="grid grid-cols-3 gap-4">
           <div className="boder min-h-[150px] col-span-2">
             <div className="grid md:grid-cols-2 gap-2">
-              <Inputbox label={"Blog Title"} name="title" value={data.title} onChange={__inputHandle}  placeholder="Blog Title" />
-              <Inputbox label={"Order Number"} name="index" value={data.index} onChange={__inputHandle}  placeholder="Order Number" />
+              <Inputbox 
+                label={"Blog Title"} 
+                name="title" 
+                error={zodError(errors, 'title')}
+                register={register('title')}
+                placeholder="Blog Title" 
+              />
+              <Inputbox 
+                label={"Order Number"} 
+                name="index" 
+                type="number"
+                error={zodError(errors, 'index')}
+                register={register('index', { valueAsNumber: true })}
+                placeholder="Order Number" 
+              />
 
               <Selectbox 
                 name="status"
                 onChange={__selectHandle}
-                value={data.status || '2'}
+                value={watch('status')}
                 label={"Status"}
                 list={statusList} 
                 option={{ label: "name", value: 'value'}}  
@@ -55,10 +62,11 @@ const BlogForm = ({ onSubmit, type, objData }) => {
               <div className="col-span-2 mb-10">
                 <TextEditor
                   label={"Blog Details"}
+                  name="text"
                   mediaEnable={true}
-                  value={data.text}
+                  value={watch('text')}
                   className={'h-[85vh]'}
-                  onChange={(value) => __selectHandle('text', value)} 
+                  onChange={__selectHandle} 
                 />
               </div>
               
@@ -71,12 +79,12 @@ const BlogForm = ({ onSubmit, type, objData }) => {
               </div>
               <UploadThumbnail 
                 text="Blog Thumbnail" 
-                src={data.thumbnail && typeof data.thumbnail === 'object' ? 
-                  URL.createObjectURL(data.thumbnail) : 
-                  type === 'update' ? `${IMAGE_URL}/${data.thumbnail}` 
-                  : data.thumbnail} 
-                description={data.short_description} 
-                setThumbnail={(value) => __selectHandle('thumbnail', value)}
+                src={watch('thumbnail') && typeof watch('thumbnail') === 'object' ? 
+                  URL.createObjectURL(watch('thumbnail')) : 
+                  type === 'update' ? `${IMAGE_URL}/${watch('thumbnail')}` 
+                  : watch('thumbnail')} 
+                description={''} 
+                setThumbnail={(value) => setValue('thumbnail', value)}
               />
             </div>
           </div>

@@ -1,11 +1,10 @@
 import { IMAGE_URL } from 'config';
-import axios from 'libs/axios';
 import { displayError } from 'libs/getError';
-import React from 'react'
 import { AiOutlineCloudUpload } from "react-icons/ai";
+import propTypes from 'prop-types'
+import { productApi } from 'libs/api';
 
 const ImageContainer = ({ formImage, setFormImage, imageList }) => {
-
   const __uploadHandle = (e) => {
     const files = e.target.files
     setFormImage((prev) => [...prev, ...Object.values(files)])
@@ -17,7 +16,7 @@ const ImageContainer = ({ formImage, setFormImage, imageList }) => {
 
   const __removeUploadImage = async(item) => {
     try {
-      await axios.delete(`/api/admin/product/image/${item.id}`)
+      await productApi.removeImage(item.id)
       imageList.mutate((prev) => prev.filter((i) => i.id !== item.id), false)
     } catch (error) {
       return displayError(error)
@@ -43,9 +42,15 @@ const ImageContainer = ({ formImage, setFormImage, imageList }) => {
   )
 }
 
+ImageContainer.propTypes = {
+  formImage: propTypes.array,
+  setFormImage: propTypes.func,
+  imageList: propTypes.object
+}
+
 export default ImageContainer;
 
-const ImageList = ({images, type, __removeImage = () => {} }) => {
+const ImageList = ({ images, type, __removeImage }) => {
   return (
     <div className='grid grid-cols-2 gap-2 px-2 py-2'>
       {Array.isArray(images) && images.map((item, indx) => {
@@ -61,4 +66,14 @@ const ImageList = ({images, type, __removeImage = () => {} }) => {
       })}
     </div>
   )
+}
+
+ImageList.propTypes = {
+  images: propTypes.array,
+  type: propTypes.string,
+  __removeImage: propTypes.func
+}
+
+ImageList.defaultProps = {
+  __removeImage: () => {}
 }

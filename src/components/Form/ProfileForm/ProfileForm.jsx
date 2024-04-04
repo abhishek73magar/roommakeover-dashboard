@@ -12,15 +12,18 @@ import { addAdminFormSchema, updateAdminFormSchema } from "utils/formSchema"
 
 const ProfileForm = ({ onSubmit, dataObj, type }) => {
   const adminFormSchema = type === 'update' ? updateAdminFormSchema : addAdminFormSchema
-  const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm({ resolver: zodResolver(adminFormSchema), defaultValues: dataObj })
+  const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm({ resolver: zodResolver(adminFormSchema), defaultValues: dataObj, mode: 'onChange' })
 
   const __onSumbit = (formData) => {
     delete formData.cpassword   
 
     return onSubmit(formData)
       .then((response) => {
-        if(type === 'update') reset({...profileObj, ...response})
-        else { reset() } 
+        if(response){
+          if(type === 'update') reset({...profileObj, ...response, new_password: ""})
+          else { reset() } 
+        }
+        
       })
   }
 
@@ -29,15 +32,43 @@ const ProfileForm = ({ onSubmit, dataObj, type }) => {
     // return trigger(name)
   }
 
-  console.count('re-render: ')
-
   return (
     <form method="post" onSubmit={handleSubmit(__onSumbit)}>
     <div className="grid md:grid-cols-2 gap-x-4">
-      <Inputbox label={"Fullname"} error={zodError(errors, 'fullname')} register={register("fullname")} placeholder="Fullname" />
-      <Inputbox label={'Email'} error={zodError(errors, 'email')} register={register("email")} placeholder="Email" />
-      <Inputbox label={'Password'} error={zodError(errors, 'password')} type="password" register={register('password')} placeholder="Password" />
-      <Inputbox label={'Confirm Password'} error={zodError(errors, 'cpassword')} type="password" register={register('cpassword')} placeholder="Confirm Password" />
+      <Inputbox 
+        label={"Fullname"} 
+        error={zodError(errors, 'fullname')} 
+        register={register("fullname")} 
+        placeholder="Fullname" 
+      />
+      <Inputbox 
+        label={'Email'} 
+        error={zodError(errors, 'email')} 
+        register={register("email")} 
+        placeholder="Email" 
+      />
+      <Inputbox 
+        label={'Password'} 
+        error={zodError(errors, 'password')} 
+        type="password" 
+        register={register('password')} 
+        placeholder="Password"
+      />
+      {type === 'update' && 
+      <Inputbox 
+        label={'New Password'} 
+        error={zodError(errors, 'new_password')} 
+        type="password" 
+        register={register('new_password')} 
+        placeholder="New Password" 
+      />}
+      <Inputbox 
+        label={'Confirm Password'} 
+        error={zodError(errors, 'cpassword')} 
+        type="password" 
+        register={register('cpassword')} 
+        placeholder="Confirm Password" 
+      />
       <Selectbox
         label={'Status'}
         error={zodError(errors, 'status')}

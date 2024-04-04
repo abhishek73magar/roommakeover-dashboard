@@ -2,7 +2,7 @@ export const productObj = {
   title: "",
   price: "",
   is_discount: false,
-  new_price: "",
+  new_price: 0,
   quantity: 1,
   category_id: "",
   colors: [],
@@ -36,7 +36,7 @@ export const diyObj = {
 
 export const blogObj = {
   title: "",
-  index: "",
+  index: 2,
   text: "",
   thumbnail: "",
   status: '2'

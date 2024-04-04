@@ -13,7 +13,7 @@ const CreateDIY = () => {
     try {
       const res = await diyProductApi.post(formData)
       if(res.status === 201){
-        toast.success("Hobbie Product Updated")
+        toast.success("DIY Product Updated")
         return res.data
       }
     } catch (error) {
@@ -28,7 +28,7 @@ const CreateDIY = () => {
 
       <br />
       <Container>
-        <HobbieProductForm objData={diyObj} onSubmit={__createDIYProduct} hobbieForm={false} />
+        <HobbieProductForm objData={diyObj} onSubmit={__createDIYProduct} hobbieForm={false} name="diy" />
       </Container>
     </section>
   )

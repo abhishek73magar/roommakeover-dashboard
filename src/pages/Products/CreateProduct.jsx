@@ -13,6 +13,7 @@ const CreateProduct = () => {
     try {
       await productApi.post(formData)
       toast.success("product created")
+      return true;
     } catch (error) {
       displayError(error)
       return Promise.reject(error)

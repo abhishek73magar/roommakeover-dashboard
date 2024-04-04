@@ -5,7 +5,11 @@ export const auth = ({ request }) => {
   const { pathname } = new URL(request.url)
   const decode = DECODE_TOKEN()
   if(pathname === '/') return redirect('/home')
-  if(decode && pathname !== 'login') return null;
+  if(decode) {
+    if(pathname === '/login') return redirect('/home')
+    return null;
+  }
+
   if(pathname === '/login')return null
 
   return redirect('/login');

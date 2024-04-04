@@ -34,6 +34,7 @@ import Login from "pages/Login/Login";
 import { auth } from "libs/auth";
 import Media from "pages/Pages/Media/Media";
 import AddMedia from "pages/Pages/Media/AddMedia";
+import EmailConfig from "pages/Setting/EmailConfig/EmailConfig";
 
 
 export const router = createHashRouter([
@@ -113,7 +114,7 @@ export const router = createHashRouter([
           { path: "", element: <Profile /> },
           { path: "profile/create", element: <CreateProfile />},
           { path: "profile/update", element: <UpdateProfile />},
-          { path: "order-email", element: <Pages /> },
+          { path: "email-configuration", element: <EmailConfig /> },
         ]
       },
     ]

@@ -114,8 +114,9 @@ const TableBody = ({ colnames, item, subKey, slug, edit, disableEdit, onDelete }
               value={item[key]} 
               type={type} 
               slug={slug}
-              edit={edit}
+              edit={item[edit]}
               disableEdit={disableEdit}
+              disableDelete={true}
               onDelete={onDelete}
             />
             )
@@ -132,10 +133,10 @@ const TableBody = ({ colnames, item, subKey, slug, edit, disableEdit, onDelete }
               return (
                 <TableDataType 
                   key={indx} 
-                  value={subItem[key]} 
+                  value={subItem[key] === 0 ? '0' : subItem[key]} 
                   type={type} 
                   slug={slug}
-                  edit={edit}
+                  edit={subItem[edit]}
                   disableEdit={disableEdit}
                   onDelete={onDelete}
                 />

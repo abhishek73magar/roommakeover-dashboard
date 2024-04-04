@@ -24,4 +24,6 @@ export const remove = (url, option={}) => {
   return axios.delete(url, { headers: { Authorization: `Bearer ${AUTH_TOKEN()}` }, ...option}).catch((error) => Promise.reject(checkError(error)))
 }
 
-export const fetchData = (url) => swr(url, (...args) => get(...args).then((res) => res.data))
+export const fetchData = (url) => swr(url, (...args) => get(...args).then((res) => res.data), {
+  revalidateOnFocus: false
+})

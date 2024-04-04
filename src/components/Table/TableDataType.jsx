@@ -16,7 +16,7 @@ TableHeading.propTypes = {
   type: propTypes.string,
 }
 
-const TableDataType = ({ value, type, disableEdit, slug, edit, onDelete }) => {
+const TableDataType = ({ value, type, disableEdit, disableDelete, slug, edit, onDelete }) => {
   if(!value && type !== 'action') return <td></td>
   if(type === 'datetime') value = moment(value).format('DD MMM, YYYY hh:mm a')
   if(type === 'currency') value = `Rs. ${value}`
@@ -40,7 +40,7 @@ const TableDataType = ({ value, type, disableEdit, slug, edit, onDelete }) => {
         <td className='p-3 align-baseline w-[130px]' >
           <div className='flex flex-row gap-2 justify-center items-center'>
             {!disableEdit && <Link to={`${slug}${edit}`} className='text-lg hover:text-primary'><CiEdit /></Link>}
-            <div className='cursor-pointer text-lg hover:text-primary' onClick={() => onDelete(edit)}><CiTrash /></div>
+            {!disableDelete && <div className='cursor-pointer text-lg hover:text-primary' onClick={() => onDelete(edit)}><CiTrash /></div>}
           </div>
         </td>
       )
@@ -52,9 +52,15 @@ TableDataType.propTypes = {
   value: propTypes.any,
   type: propTypes.string,
   disableEdit: propTypes.bool,
+  disableDelete: propTypes.bool,
   slug: propTypes.string,
   edit: propTypes.string,
   onDelete: propTypes.func
+}
+
+TableDataType.defaultProps = {
+  disableEdit: false,
+  disableDelete: false,
 }
 
 export default TableDataType

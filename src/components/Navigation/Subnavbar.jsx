@@ -31,7 +31,7 @@ const subLink = [
   { name: "Media", path: '/media', subpath: '/pages/media', parent: '/pages'},
 
   { name: "Profile", path: '', subpath: "/setting/profile", parent: "/setting"},
-  { name: "Order Email", path: '/order-email', parent: "/setting"},
+  { name: "Email Configuration", path: '/email-configuration', parent: "/setting"},
 ]
 
 const Subnavbar = () => {

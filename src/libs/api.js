@@ -15,7 +15,8 @@ const crud = (url) => ({
 export const categoryApi = { ...crud('/api/admin/category') }
 export const productApi = { 
   ...crud('/api/admin/product'),
-  getImage: (pid) => fetchData(`/api/admin/product/image/${pid}`) 
+  getImage: (pid) => fetchData(`/api/admin/product/image/${pid}`),
+  removeImage: (id) => remove(`/api/admin/product/image/${id}`) 
 }
 export const hobbieProductApi = { ...crud('/api/admin/hobbie-product') }
 export const hobbieApi = { ...crud('/api/admin/hobbie') }
@@ -37,4 +38,8 @@ export const mediaApi = { ...crud('/api/admin/media')}
 
 export const infoApi = {
   home: () => fetchData('/api/admin/info/home')
+}
+
+export const googleApi = {
+  generateUrl: (data) => post('/api/admin/generate-auth-url', data) 
 }

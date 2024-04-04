@@ -33,7 +33,8 @@ const UpdateDIY = () => {
 
       <br />
       <Container>
-       {isLoading ? <Spinner /> : <HobbieProductForm objData={data} onSubmit={__updateDIYProduct} type="update" hobbieForm={false} />}
+       {isLoading ? <Spinner /> 
+       : <HobbieProductForm objData={data} onSubmit={__updateDIYProduct} type="update" hobbieForm={false} name="diy" />}
       </Container>
     </section>
   )

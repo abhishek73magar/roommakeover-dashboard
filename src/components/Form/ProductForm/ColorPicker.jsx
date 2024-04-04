@@ -21,7 +21,7 @@ const ColorPicker = ({ colors, setColors }) => {
   const __onKeypress = (e) => {
     if(e.charCode === 13 && color.name !== '' && color.code !== ''){
       e.preventDefault()
-      setColors((prev) => ({...prev, colors: [...prev.colors, color]}))
+      setColors((prev) => [...prev, color])
       setColor({ name: "", code: null })
       colorPicker.current.click()
     }  
@@ -30,7 +30,7 @@ const ColorPicker = ({ colors, setColors }) => {
 
   const __removeColor = (code) => {
     if(!code) return;
-    setColors(prev => ({...prev, colors: prev.colors.filter(i => i.code !== code)}))
+    setColors(prev => prev.filter(i => i.code !== code))
   }
 
   return (

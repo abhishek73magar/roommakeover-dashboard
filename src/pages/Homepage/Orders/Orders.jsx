@@ -2,6 +2,7 @@ import BreadHeader from 'components/Breadcrumbs/BreadHeader'
 import Container from 'components/Common/Container';
 import GroupTable from 'components/Table/GroupTable';
 import { orderApi } from 'libs/api';
+import toast from 'react-hot-toast';
 import { CiShoppingBasket } from "react-icons/ci";
 import { Link } from 'react-router-dom';
 
@@ -14,14 +15,37 @@ const colnames = [
   { name: "Status", key: 'status', type: "order-status"},
   { name: "Datetime", key: "date", type: "datetime" },
   { name: "Total", key: 'total_price', type: "currency"},
-  { name: "", key: 'view'}
+  { name: "", key: 'view'},
+  { name: "Action", key: 'action', type: "action"}
 ]
 
 const Orders = () => {
-  const { data, isLoading } = orderApi.swrFetch()
+  const { data, isLoading, mutate } = orderApi.swrFetch()
   
   const __filterBy = () => {
     return true;
+  }
+
+  const __orderMutate = (response, id) => {
+    return response.reduce((prev, curr) => {
+      let orders = curr.orders.filter(i => i.id !== id)
+      if(orders.length > 0) { prev.push({ ...curr, orders }) }
+      return prev;
+    }, [])
+  }
+
+  const __onDelete = async(id) => {
+    try {
+      let check = confirm("Are you sure?")
+      if(!check) return;
+      const response = await orderApi.remove(id)
+      if(response.status === 200){
+        mutate((prev) => __orderMutate(prev, id), false)
+        toast.success("Order removed")
+      }
+    } catch (error) {
+      // return console.log(error)
+    }
   }
 
   return (
@@ -40,6 +64,8 @@ const Orders = () => {
           searchBy={['fullname', 'collection_id']}
           subKey='orders'
           disbleSearch={true}
+          disableEdit={true}
+          onDelete={__onDelete}
         />
       </Container>
     </section>

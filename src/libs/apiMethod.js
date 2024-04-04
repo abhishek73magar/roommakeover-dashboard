@@ -10,7 +10,7 @@ export const post = (url, data, option={}) => {
 }
 
 export const get = (url, option={}) => {
-  return axios.get(url, { headers: { Authorization: `Bearer ${AUTH_TOKEN()}` }, ...option}).catch(() => Promise.reject(checkError))
+  return axios.get(url, { headers: { Authorization: `Bearer ${AUTH_TOKEN()}` }, ...option}).catch((err) => Promise.reject(checkError(err)))
 }
 
 export const update = (url, data, option={}) => {

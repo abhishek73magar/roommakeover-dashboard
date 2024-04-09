@@ -25,3 +25,13 @@ export const profileStatusOption = [
   { name: "Enable", value: '1'}
 ]
 
+export const OrderStatusOption = [
+  { name: "All", value: ""},
+  { name: "Cancellled", value: '0' },
+  { name: "Pending", value: '1' },
+  { name: "Verify", value: '2' },
+  { name: "Crafting", value: '3' },
+  { name: "Shipping", value: '4' },
+  { name: "Completed", value: '5' },
+]
+

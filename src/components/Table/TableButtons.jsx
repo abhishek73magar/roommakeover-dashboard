@@ -66,12 +66,12 @@ AccessStatusButton.propTypes = {
 }
 
 const OrderStatusList = {
-  "0": "Canncellled",
+  "0": "Cancellled",
   "1": "Pending",
   "2": "Verify",
   "3": "Crafting",
   "4": 'Shipping',
-  "5": "completed"
+  "5": "Completed"
 }
 
 const colors = {

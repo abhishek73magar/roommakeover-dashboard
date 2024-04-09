@@ -55,7 +55,7 @@ const Info = ({ data, mutate }) => {
     <article className=''>
       <div className="text-sm text-left mb-2">{moment(orders[0].date).format('DD MMM YYYY || hh:mm a')}</div>
       <div className='grid md:grid-cols-7 gap-3'>
-        <div className="col-span-5 overflow-x-auto min-h-[300px]">
+        <div className="col-span-7 md:col-span-5 overflow-auto">
           <table className='w-full text-sm'>
             <thead>
               <tr className=''>

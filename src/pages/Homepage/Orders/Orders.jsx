@@ -5,6 +5,7 @@ import { orderApi } from 'libs/api';
 import toast from 'react-hot-toast';
 import { CiShoppingBasket } from "react-icons/ci";
 import { Link } from 'react-router-dom';
+import { OrderStatusOption } from 'utils/selectOption';
 
 const colnames = [
   { name: "Collection Id", key: "collection_id" },
@@ -13,7 +14,7 @@ const colnames = [
   { name: "Qty", key: 'qty'},
   { name: "Price", key: 'price', type: "currency"},
   { name: "Status", key: 'status', type: "order-status"},
-  { name: "Datetime", key: "date", type: "datetime" },
+  { name: "Datetime", key: "date", type: "date-from-now" },
   { name: "Total", key: 'total_price', type: "currency"},
   { name: "", key: 'view'},
   { name: "Action", key: 'action', type: "action"}
@@ -63,8 +64,10 @@ const Orders = () => {
           isLoading={isLoading} 
           searchBy={['fullname', 'collection_id']}
           subKey='orders'
-          disbleSearch={true}
+          statusOptions={OrderStatusOption}
+          disbleSearch={false}
           disableEdit={true}
+          statusKey='status'
           onDelete={__onDelete}
         />
       </Container>

@@ -6,6 +6,7 @@ import { productApi } from "libs/api";
 import { displayError } from "libs/getError";
 import toast from "react-hot-toast";
 import { CiShop } from "react-icons/ci";
+import { statusList } from "utils/selectOption";
 
 const colnames = [
   { name: "Image", key: "url", type: "image"},
@@ -41,7 +42,7 @@ const Products = () => {
       <Container>
         <Table  
           colnames={colnames} 
-          data={ data && Array.isArray(data.data) ? data.data
+          data={data && Array.isArray(data.data) ? data.data
             .map((item) => {
             const url =  item.url ? `${IMAGE_URL}/${item.url}` : null
             const price = item.is_discount ? item.new_price : item.price
@@ -50,6 +51,8 @@ const Products = () => {
           isLoading={isLoading} 
           searchBy={'title'}
           slug={'product/update?pid='}
+          statusKey="status"
+          statusOptions={[{ name: "All", value: "" }, ...statusList]}
           edit="pid"
           onDelete={__removeProduct}
         />

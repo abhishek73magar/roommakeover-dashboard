@@ -21,12 +21,7 @@ const GroupTable = ({ colnames, data, subKey, searchBy, isLoading, statusKey, st
   const [search, setSearch] = useState("")
   const [status, setStatus] = useState('')
 
-  const __searchChange = (e) => {
-    const value = e.target.value.toLowerCase();
-    setSearch(value)
-  }
-
-  const __filterByStatus = (prev, item) => {
+  const __filterBy = (prev, item) => {
     let subKeyValue = item[subKey]
 
     if(statusKey && statusKey !== '' && status && status !== '') {
@@ -66,7 +61,7 @@ const GroupTable = ({ colnames, data, subKey, searchBy, isLoading, statusKey, st
             value={status}
             />
         </div>}
-        {!disbleSearch && <Searchbox value={search} onChange={__searchChange} />}
+        {!disbleSearch && <Searchbox setValue={setSearch} />}
       </div>
       <div className='overflow-auto'>
         <table className='text-sm w-full text-left'>
@@ -80,7 +75,7 @@ const GroupTable = ({ colnames, data, subKey, searchBy, isLoading, statusKey, st
           </thead>
           <tbody>
           {Array.isArray(data) && data
-            .reduce(__filterByStatus, [])
+            .reduce(__filterBy, [])
             // .filter(__filterBy)
             .map((item, indx) => {
               return (
@@ -100,7 +95,7 @@ const GroupTable = ({ colnames, data, subKey, searchBy, isLoading, statusKey, st
           
         </table>
       </div>
-      {!isLoading ? !Array.isArray(data) || data.reduce(__filterByStatus, []).length === 0 ? <DataNotFound className={'min-h-[150px]'} /> : null : null}
+      {!isLoading ? !Array.isArray(data) || data.reduce(__filterBy, []).length === 0 ? <DataNotFound className={'min-h-[150px]'} /> : null : null}
       {isLoading && <Spinner />}
     </div>
   )

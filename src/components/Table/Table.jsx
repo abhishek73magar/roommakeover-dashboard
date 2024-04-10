@@ -4,6 +4,7 @@ import propTypes from 'prop-types'
 import { Searchbox } from './TableButtons';
 import TableDataType, { TableHeading } from './TableDataType';
 import DataNotFound from 'components/DataNotFound/DataNotFound';
+import Selectbox from 'components/Form/FormElement/Selectbox';
 
 // const colnames = [
 //   { name: "Name", key: "name"},
@@ -14,10 +15,15 @@ import DataNotFound from 'components/DataNotFound/DataNotFound';
 //   { name: "salary", key: "1000", type: 'currency'},
 // ]
 
-const Table = ({ colnames, data, searchBy, isLoading, onClick, slug, edit, disableEdit, onDelete }) => {
+const Table = ({ colnames, data, statusKey, statusOptions, searchBy, isLoading, onClick, slug, edit, disableEdit, onDelete }) => {
   const [search, setSearch] = useState("")
+  const [status, setStatus] = useState("")
 
   const __filterBy = (item) => {
+    if(statusKey && statusKey !== '' && status && status !== ''){
+      console.log(item[statusKey].trim(), status, status === item[statusKey].trim())
+      if(status !== item[statusKey]) return false;
+    }
     if(search === '' || !searchBy) return true;
     if(Array.isArray(searchBy)){
       return searchBy.some((key) => item[key].toString().toLowerCase().includes(search))
@@ -25,10 +31,39 @@ const Table = ({ colnames, data, searchBy, isLoading, onClick, slug, edit, disab
     return item[searchBy].toString().toLowerCase().includes(search)
   }
 
+  // const __filterBy = (prev, item) => {
+
+  //   if(statusKey && statusKey !== '' && status && status !== '') {
+  //     if(status !== item[statusKey].toString()) return prev;
+  //   }
+  //   if(search && search !== ''){
+  //     if(Array.isArray(searchBy)){
+  //       const check = searchBy.some((key) => item[key].toString().toLowerCase().includes(search))
+  //       if(!check) return prev;
+  //     } else {
+  //       const check = item[searchBy].toString().toLowerCase().includes(search)
+  //       if(!check) return prev;
+  //     }
+  //   }
+
+  //   prev.push({ ...item })
+  //   return prev;
+  // }
+
   return (
     <div>
-      <div className='flex flex-row justify-between items-center gap-4 px-2 py-2'>
-        <div></div>
+      <div className='flex flex-row justify-end items-center gap-4 px-2 py-2'>
+        {statusKey && <div className=''>
+          <Selectbox 
+            className='min-w-[100px]'
+            name="status"
+            onChange={(name, value) => setStatus(value)}
+            label={""}
+            list={statusOptions} 
+            option={{ label: "name", value: 'value'}}  
+            value={status}
+            />
+        </div>}
         <Searchbox setValue={setSearch} />
       </div>
       <div className='overflow-auto'>
@@ -75,6 +110,8 @@ const Table = ({ colnames, data, searchBy, isLoading, onClick, slug, edit, disab
 Table.propTypes = {
   colnames: propTypes.array,
   data: propTypes.array,
+  statusKey: propTypes.string,
+  statusOptions: propTypes.array,
   searchBy: propTypes.oneOfType([propTypes.string, propTypes.array]),
   isLoading: propTypes.bool,
   onClick: propTypes.func,
@@ -88,6 +125,8 @@ Table.defaultProps = {
   isLoading: true,
   onClick: () => {},
   onDelete: () => {},
+  statusKey: null,
+  statusOptions: [],
   edit: 'id',
   disableEdit: false
 }

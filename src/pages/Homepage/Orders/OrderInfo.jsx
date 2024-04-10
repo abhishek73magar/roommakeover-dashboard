@@ -2,7 +2,7 @@ import BreadHeader from 'components/Breadcrumbs/BreadHeader'
 import DataNotFound from 'components/DataNotFound/DataNotFound'
 import Spinner from 'components/Spinner/Spinner'
 import { IMAGE_URL } from 'config'
-import { displayError } from 'libs/getError'
+import { getError } from 'libs/getError'
 import moment from 'moment'
 import { CiShoppingBasket } from 'react-icons/ci'
 import { useParams } from 'react-router-dom'
@@ -11,6 +11,7 @@ import { twMerge } from 'tailwind-merge'
 import { orderApi } from 'libs/api'
 import propTypes from 'prop-types'
 import Container from 'components/Common/Container'
+import toast from 'react-hot-toast'
 
 const OrderInfo = () => {
   const params = useParams()
@@ -37,7 +38,11 @@ const Info = ({ data, mutate }) => {
   // const [orders, setOrders] = useState(orderList|| [])
   const changeStatus = async(order_id, value) => {
     try {
-      const req = await orderApi.statusUpdate(order_id, { status: value })
+      const req = await toast.promise(orderApi.statusUpdate(order_id, { status: value }), {
+        loading: "status updating",
+        success: "Done",
+        error: (err) => getError(err)
+      })
       if(req.status === 200) {
         // toast.success("status update")
         mutate((prev) => {
@@ -48,14 +53,14 @@ const Info = ({ data, mutate }) => {
           return { ...prev }
         }, false)
       }
-    } catch (error) { displayError(error) }
+    } catch (error) { console.log(getError(error)) }
   }
   if(!orders || !Array.isArray(orders) || orders.length === 0) return <DataNotFound />;
   return (
     <article className=''>
       <div className="text-sm text-left mb-2">{moment(orders[0].date).format('DD MMM YYYY || hh:mm a')}</div>
       <div className='grid md:grid-cols-7 gap-3'>
-        <div className="col-span-7 md:col-span-5 overflow-auto">
+        <div className="col-span-7 md:col-span-5">
           <table className='w-full text-sm'>
             <thead>
               <tr className=''>

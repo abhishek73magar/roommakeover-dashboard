@@ -6,6 +6,7 @@ import { blogApi } from 'libs/api';
 import { displayError } from 'libs/getError';
 import toast from 'react-hot-toast';
 import { PiNewspaperClippingLight } from "react-icons/pi";
+import { statusList } from 'utils/selectOption';
 
 const colnames = [
   { name: "Index", key: 'index'},
@@ -45,6 +46,8 @@ const Blog = () => {
           }) : []}
           isLoading={isLoading} 
           searchBy={['title']}
+          statusKey='status'
+          statusOptions={[{ name: "All", value: ""}, ...statusList]}
           slug={'update?id='}
           onDelete={__removeBlog}
         />

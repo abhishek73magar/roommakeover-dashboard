@@ -53,5 +53,6 @@ export const profileObj = {
   password: "",
   cpassword: "",
   status: '0',
-  role_id: 2
+  role_id: 2,
+  order_email: true
 }

@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form"
 import { zodError } from "libs/zodError"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addAdminFormSchema, updateAdminFormSchema } from "utils/formSchema"
+import ToggleButton from "../FormElement/ToggleButton"
 
 const ProfileForm = ({ onSubmit, dataObj, type }) => {
   const adminFormSchema = type === 'update' ? updateAdminFormSchema : addAdminFormSchema
@@ -78,6 +79,9 @@ const ProfileForm = ({ onSubmit, dataObj, type }) => {
         onChange={__selectInputChange}
         name={'status'}
       />
+      <div className="flex flex-col justify-center">
+        <ToggleButton label={'Order Email'} labelClassname={'font-bold'} register={register('order_email')} />
+      </div>
     </div>
 
     <div className='flex flex-row justify-end items-center mt-4'>

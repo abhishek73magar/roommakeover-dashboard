@@ -24,7 +24,8 @@ const OrderInfo = () => {
       
       <br />
       <Container>
-        {isLoading ? <Spinner /> : <Info data={data} mutate={mutate}  />}
+        {isLoading ? <Spinner /> :  
+        data ? <Info data={data} mutate={mutate}  /> : <DataNotFound text='Order Not Found !' />}
       </Container>
     </section>
   )

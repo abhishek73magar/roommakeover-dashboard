@@ -24,7 +24,7 @@ const Customers = () => {
       if(!confirm) return;
       await customerApi.remove(id)
       mutate((prev) => prev.filter(i => i.id !== id), false)
-      toast.success("Customization product removed !")
+      toast.success("Customer removed !!")
     } catch (error) {
       displayError(error)
     }

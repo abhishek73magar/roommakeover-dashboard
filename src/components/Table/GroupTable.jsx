@@ -149,18 +149,19 @@ const TableBody = ({ colnames, item, subKey, slug, edit, disableEdit, onDelete }
               disableEdit={disableEdit}
               disableDelete={true}
               onDelete={onDelete}
+              groupTable={true}
             />
             )
         })}
       </tr>
 
-      {toggle && Array.isArray(subData) && subData.map((subItem, __indx) => {
+      {Array.isArray(subData) && subData.map((subItem, __indx) => {
         return (
-          <tr className='' key={__indx}>
+          <tr className={`${toggle ? "" : "hidden"}`} key={__indx}>
             <td className='px-2'></td>
             {colnames.map(({ key, type}, indx) => {
               const mainVal = item[key]
-              if(mainVal) return <td key={indx}></td>
+              if(mainVal && key !== 'datetime') return <td key={indx}></td>
               return (
                 <TableDataType 
                   key={indx} 

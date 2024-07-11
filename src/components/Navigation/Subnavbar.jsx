@@ -18,6 +18,8 @@ const mainNav = [
 const subLink = [
   { name: "Dashboard", path: "", parent: "/home" },
   { name: "orders", path: '/orders', parent: "/home" },
+  { name: "Order Invoice", path: "/order-invoice", parent: "/home" },
+  { name: "Payment Transanction", path: "/payment-transaction", parent: "/home"},
 
   { name: "Product", path: "", subpath: '/products/product', parent: '/products' },
   { name: "Category", path: "/category", parent: '/products' },

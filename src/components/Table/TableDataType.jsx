@@ -1,5 +1,5 @@
 import Image from "components/Image/Image";
-import { AccessStatusButton, OrderStatusButton, StatusButton } from "components/Table/TableButtons";
+import { AccessStatusButton, CustomStatusButton, OrderStatusButton, StatusButton } from "components/Table/TableButtons";
 import moment from "moment";
 import { CiEdit, CiTrash } from "react-icons/ci";
 import { Link } from "react-router-dom";
@@ -16,13 +16,14 @@ TableHeading.propTypes = {
   type: propTypes.string,
 }
 
-const TableDataType = ({ value, type, disableEdit, disableDelete, slug, edit, onDelete }) => {
-  if(!value && type !== 'action') return <td></td>
+const TableDataType = ({ value, type, options, disableEdit, disableDelete, slug, edit, onDelete, groupTable }) => {
+  if(!value && type !== 'action') return <td>{groupTable ? "" : "(None)"}</td>
   if(type === 'datetime') value = moment(value).format('DD MMM, YYYY hh:mm a')
   if(type === 'currency') value = `Rs. ${value}`
   if(type === 'date-from-now') value = moment(value).fromNow()
   if(type === 'truncate') return <td className="p-3 truncate max-w-[200px]">{value}</td>
   if(type === 'heading') return <td  className='p-3 align-baseline font-semibold'>{value}</td>
+  if(type === 'custom-status') return <td  className='p-3 align-baseline w-[100px]'><CustomStatusButton options={options} statusCode={Number(value)} /></td>
   if(type === 'status') return <td  className='p-3 align-baseline w-[100px]'><StatusButton statusCode={Number(value)} /></td>
   if(type === 'access-status') return <td  className='p-3 align-baseline w-[100px]'><AccessStatusButton statusCode={Number(value)} /></td>
   if(type === 'order-status') return <td  className='p-3 align-baseline w-[100px]'><OrderStatusButton statusCode={Number(value)} /></td>
@@ -51,16 +52,20 @@ const TableDataType = ({ value, type, disableEdit, disableDelete, slug, edit, on
 TableDataType.propTypes = {
   value: propTypes.any,
   type: propTypes.string,
+  options: propTypes.object,
   disableEdit: propTypes.bool,
   disableDelete: propTypes.bool,
   slug: propTypes.string,
   edit: propTypes.string,
-  onDelete: propTypes.func
+  onDelete: propTypes.func,
+  groupTable: propTypes.bool
 }
 
 TableDataType.defaultProps = {
+  options: {},
   disableEdit: false,
   disableDelete: false,
+  groupTable: false,
 }
 
 export default TableDataType

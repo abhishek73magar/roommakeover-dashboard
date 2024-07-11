@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 const BreadHeader = ({ icon, title, subtitle, path, addNew }) => {
   return (
-    <div className="flex flex-row items-center justify-between gap-4 bg-white p-3">
+    <div className="flex flex-row items-center justify-between gap-4 bg-white p-3 no-print">
       <div className="flex flex-row items-center justify-start gap-4 ">
         <div className="text-4xl text-primary border-2 rounded-full border-l-0 border-b-0 p-3">
           {icon}

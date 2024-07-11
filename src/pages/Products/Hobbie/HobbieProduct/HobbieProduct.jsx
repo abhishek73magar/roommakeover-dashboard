@@ -11,7 +11,7 @@ const colnames = [
   { name: "ID", key: "id"},
   { name: "Image", key: "thumbnail", type: "image"},
   { name: "Title", key: "title", type: "heading"},
-  { name: "category", key: "category"},
+  { name: "Hobbie Name", key: "hobbie_name"},
   { name: "status", key: "status", type: 'status'},
   { name: "action", key: '', type: 'action'}
 ]

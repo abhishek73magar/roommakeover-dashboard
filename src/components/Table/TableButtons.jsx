@@ -83,6 +83,24 @@ const colors = {
   "5" : "bg-primary text-white",
 }
 
+const normalColor = {
+  "0": "bg-red-500 text-white",
+  "1": "bg-primary text-white"
+}
+
+export const CustomStatusButton = ({ options, statusCode }) => {
+  return (
+    <div className={twMerge(`py-2 px-2 border text-center text-xs rounded-md`, normalColor[statusCode ?? 1])}>
+      {options[statusCode] ?? "(None)"}
+    </div>
+  )
+}
+
+CustomStatusButton.propTypes = {
+  options: propTypes.object,
+  statusCode: propTypes.number
+}
+
 export const OrderStatusButton = ({ statusCode }) => {
   return (
     <div className={twMerge(`py-2 px-2 border text-center text-xs rounded-md`, colors[statusCode || 0])}>

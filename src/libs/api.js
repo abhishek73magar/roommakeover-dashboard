@@ -1,3 +1,4 @@
+import { mutate } from "swr"
 import { fetchData, get, post, remove, update } from "./apiMethod"
 
 const crud = (url) => ({
@@ -8,7 +9,8 @@ const crud = (url) => ({
   updateById: (id, data, option) => update(`${url}/${id}`, data, option),
   remove: (id, option) => remove(`${url}/${id}`, option),
   swrFetch: (id) => fetchData(`${url}${id ? `/${id}` : ""}`),
-  swrFetchById: (id) => fetchData(`${url}/${id}`)
+  swrFetchById: (id) => fetchData(`${url}/${id}`),
+  mutate: (callback, revalidate) => mutate(url, callback, { revalidate })
 })
 
 
@@ -42,4 +44,17 @@ export const infoApi = {
 
 export const googleApi = {
   generateUrl: (data) => post('/api/admin/generate-auth-url', data) 
+}
+
+export const invoiceApi = { 
+  ...crud('/api/admin/invoice'),
+  mutateById: (invoice_id, callback) => mutate(`/api/admin/invoice/${invoice_id}`, callback, { revalidate: false }),
+  order: (collection_id) => fetchData(`/api/admin/invoice/order/${collection_id}`),
+  transaction: () => fetchData('/api/admin/transaction')
+}
+
+export const transactionApi = {
+  ...crud('/api/admin/transaction'),
+  invoice: (invoice_id) => fetchData(`/api/admin/transaction/invoice/${invoice_id}`),
+  mutateById: (invoice_id, callback) => mutate(`/api/admin/transaction/invoice/${invoice_id}`, callback, { revalidate: false })
 }

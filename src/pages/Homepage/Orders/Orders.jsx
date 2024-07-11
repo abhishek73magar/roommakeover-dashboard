@@ -8,13 +8,14 @@ import { Link } from 'react-router-dom';
 import { OrderStatusOption } from 'utils/selectOption';
 
 const colnames = [
-  { name: "Collection Id", key: "collection_id" },
+  { name: "Collection Id", key: "id" },
   { name: "Title", key: 'title', type: 'truncate' },
   { name: "Fullname", key: "fullname" },
   { name: "Qty", key: 'qty'},
   { name: "Price", key: 'price', type: "currency"},
   { name: "Status", key: 'status', type: "order-status"},
-  { name: "Datetime", key: "date", type: "date-from-now" },
+  { name: "Datetime", key: "datetime", type: 'date-from-now' },
+  // { name: "Datetime", key: "status_datetime", type: "date-from-now" },
   { name: "Total", key: 'total_price', type: "currency"},
   { name: "", key: 'view'},
   { name: "Action", key: 'action', type: "action"}
@@ -23,9 +24,6 @@ const colnames = [
 const Orders = () => {
   const { data, isLoading, mutate } = orderApi.swrFetch()
   
-  const __filterBy = () => {
-    return true;
-  }
 
   const __orderMutate = (response, id) => {
     return response.reduce((prev, curr) => {
@@ -57,12 +55,16 @@ const Orders = () => {
       <Container>
         <GroupTable 
           colnames={colnames} 
-          data={data ? data.filter(__filterBy).map((item) => {
-            const view = <Link to={item.collection_id} className='hover:underline text-primary' >View</Link>
-            return { ...item, view }
+          data={data ? data.map((item) => {
+            const view = <Link to={item.id} className='hover:underline text-primary' >View</Link>
+            const orders = item.orders.map((item) => {
+              const total_price = item.qty * item.price
+              return { ...item, datetime: item.status_datetime, total_price }
+            })
+            return { ...item, view, orders, datetime: item.create_at }
           }) : []} 
           isLoading={isLoading} 
-          searchBy={['fullname', 'collection_id']}
+          searchBy={['fullname', 'id']}
           subKey='orders'
           statusOptions={OrderStatusOption}
           disbleSearch={false}

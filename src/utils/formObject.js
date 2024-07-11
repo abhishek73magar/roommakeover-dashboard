@@ -56,3 +56,11 @@ export const profileObj = {
   role_id: 2,
   order_email: true
 }
+
+export const invoiceUpdateForm = {
+  transaction_code: '',
+  status: '1',
+  gateway: '1',
+  invoice_status: '0',
+  amount: ''
+}

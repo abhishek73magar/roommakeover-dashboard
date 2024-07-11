@@ -59,3 +59,11 @@ export const blogFormSchema = z.object({
   index: z.number({ invalid_type_error: "Index must be number"}),
   status: z.enum(['0', '1', '2'], { invalid_type_error: "Must be 0 (unpublished), 1 (published) or 2 (draft) "})
 }).passthrough()
+
+export const transactionFormSchema = z.object({
+  transaction_code: z.string(),
+  status: z.enum(['1', '0'], { invalid_type_error: "Status must be Complete or error"}),
+  invoice_status: z.enum(['0', '1'], { invalid_type_error: "Invoice Status must be Paid or Unpaid" }),
+  gateway: z.enum(['0', '1', '2', '3']),
+  amount: z.number().min(1, { message: "Minimum amount is 1"})
+})

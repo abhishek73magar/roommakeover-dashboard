@@ -35,6 +35,9 @@ import { auth } from "libs/auth";
 import Media from "pages/Pages/Media/Media";
 import AddMedia from "pages/Pages/Media/AddMedia";
 import EmailConfig from "pages/Setting/EmailConfig/EmailConfig";
+import PaymentTransaction from "pages/Homepage/PaymentTransaction";
+import OrderInvoice from "pages/Homepage/OrderInvoice/OrderInvoice";
+import OrderInvoiceDetails from "pages/Homepage/OrderInvoice/OrderInvoiceDetails";
 
 
 export const router = createHashRouter([
@@ -51,9 +54,17 @@ export const router = createHashRouter([
             path: "orders",
             children: [
               { path: "", element: <Orders />},
-              { path: ":collection_id", element: <OrderInfo />},
+              { path: ":collection_id", element: <OrderInfo />}
             ]
-          }
+          },
+          { 
+            path: 'order-invoice',  
+            children: [
+              { path: "", element: <OrderInvoice /> },
+              { path: ":invoice_id", element: <OrderInvoiceDetails />}
+            ]
+          },
+          { path: 'payment-transaction', element: <PaymentTransaction />}
         ]
       },
       {

@@ -16,7 +16,7 @@ const Navigation = () => {
   }
 
   return (
-    <header className='text-secondary'>
+    <header className='text-secondary no-print'>
       <nav className=" bg-primary py-2">
         <div className={twMerge(`flex flex-row gap-3 justify-between items-center`, commonClassName)}>
           <div className='w-[300px]'>

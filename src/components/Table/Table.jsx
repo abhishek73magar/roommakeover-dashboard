@@ -15,7 +15,7 @@ import Selectbox from 'components/Form/FormElement/Selectbox';
 //   { name: "salary", key: "1000", type: 'currency'},
 // ]
 
-const Table = ({ colnames, data, statusKey, statusOptions, searchBy, isLoading, onClick, slug, edit, disableEdit, onDelete }) => {
+const Table = ({ colnames, data, statusKey, statusOptions, searchBy, isLoading, onClick, slug, edit, disableEdit, onDelete, disableSearch }) => {
   const [search, setSearch] = useState("")
   const [status, setStatus] = useState("")
 
@@ -26,29 +26,10 @@ const Table = ({ colnames, data, statusKey, statusOptions, searchBy, isLoading, 
     }
     if(search === '' || !searchBy) return true;
     if(Array.isArray(searchBy)){
-      return searchBy.some((key) => item[key].toString().toLowerCase().includes(search))
+      return searchBy.some((key) => !!item[key] && item[key].toString().toLowerCase().includes(search))
     } 
     return item[searchBy].toString().toLowerCase().includes(search)
   }
-
-  // const __filterBy = (prev, item) => {
-
-  //   if(statusKey && statusKey !== '' && status && status !== '') {
-  //     if(status !== item[statusKey].toString()) return prev;
-  //   }
-  //   if(search && search !== ''){
-  //     if(Array.isArray(searchBy)){
-  //       const check = searchBy.some((key) => item[key].toString().toLowerCase().includes(search))
-  //       if(!check) return prev;
-  //     } else {
-  //       const check = item[searchBy].toString().toLowerCase().includes(search)
-  //       if(!check) return prev;
-  //     }
-  //   }
-
-  //   prev.push({ ...item })
-  //   return prev;
-  // }
 
   return (
     <div>
@@ -64,7 +45,7 @@ const Table = ({ colnames, data, statusKey, statusOptions, searchBy, isLoading, 
             value={status}
             />
         </div>}
-        <Searchbox setValue={setSearch} />
+        {disableSearch ? null : <Searchbox setValue={setSearch} />}
       </div>
       <div className='overflow-auto'>
         <table className='text-sm w-full text-left'>
@@ -82,12 +63,13 @@ const Table = ({ colnames, data, statusKey, statusOptions, searchBy, isLoading, 
             .map((item, indx) => {
               return (
                 <tr className='odd:bg-slate-100 hover:bg-slate-50 cursor-pointer' onClick={() => onClick(item)} key={indx}>
-                  {colnames.map(({ key, type }, __indx) => {
+                  {colnames.map(({ key, type, options }, __indx) => {
                     return (
                       <TableDataType 
                         key={__indx}
                         value={item[key]}
                         type={type}
+                        options={options}
                         slug={slug}
                         edit={item[edit]}
                         disableEdit={disableEdit}
@@ -118,7 +100,8 @@ Table.propTypes = {
   onDelete: propTypes.func,
   slug: propTypes.string,
   edit: propTypes.string,
-  disableEdit: propTypes.bool
+  disableEdit: propTypes.bool,
+  disableSearch: propTypes.bool
 }
 
 Table.defaultProps = {
@@ -128,7 +111,8 @@ Table.defaultProps = {
   statusKey: null,
   statusOptions: [],
   edit: 'id',
-  disableEdit: false
+  disableEdit: false,
+  disableSearch: false
 }
 
 

@@ -35,3 +35,18 @@ export const OrderStatusOption = [
   { name: "Completed", value: '5' },
 ]
 
+export const paymentStatusOption = [
+  { name: "Complete", value: '1' },
+  { name: "Transaction Error", value: "0" }
+]
+
+export const paymentGatewayOption = [
+  { name: "ESEWA", value: '1' },
+  { name: "KHALTI", value: '2' },
+  { name: "FONE-PAY", value: '3' },
+]
+
+export const invoiceStatusOption = [
+  { name: "Paid", value: '1' },
+  { name: "Unpaid", value: '0'}
+]

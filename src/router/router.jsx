@@ -38,6 +38,7 @@ import EmailConfig from "pages/Setting/EmailConfig/EmailConfig";
 import PaymentTransaction from "pages/Homepage/PaymentTransaction";
 import OrderInvoice from "pages/Homepage/OrderInvoice/OrderInvoice";
 import OrderInvoiceDetails from "pages/Homepage/OrderInvoice/OrderInvoiceDetails";
+import CreateOrder from "pages/Homepage/Orders/CreateOrder";
 
 
 export const router = createHashRouter([
@@ -54,6 +55,7 @@ export const router = createHashRouter([
             path: "orders",
             children: [
               { path: "", element: <Orders />},
+              { path: "create", element: <CreateOrder /> },
               { path: ":collection_id", element: <OrderInfo />}
             ]
           },

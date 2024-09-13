@@ -56,7 +56,7 @@ TableDataType.propTypes = {
   disableEdit: propTypes.bool,
   disableDelete: propTypes.bool,
   slug: propTypes.string,
-  edit: propTypes.string,
+  edit: propTypes.oneOfType([propTypes.string, propTypes.number]),
   onDelete: propTypes.func,
   groupTable: propTypes.bool
 }

@@ -8,7 +8,7 @@ const Container = ({ children, className }) => {
 }
 
 Container.propTypes = {
-  children: propTypes.object,
+  children: propTypes.oneOfType([propTypes.array, propTypes.object]),
   className: propTypes.string
 }
 

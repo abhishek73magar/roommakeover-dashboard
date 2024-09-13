@@ -7,7 +7,6 @@ const Inputbox = ({ label, type, id, className, divClassname, error, register, .
     <div className={twMerge('w-full flex flex-col justify-start items-start gap-0.5 text-sm mb-2', divClassname)}>
       <label htmlFor={id} className='font-semibold'>{label}</label>
       <div className='w-full flex flex-col justify-start items-start'>
-       {error && error !== '' && <span className='text-xs text-red-500'>{error} *</span>}
         <input 
           type={type || 'text'} 
           className={twMerge(`outline-none border px-2 py-2 w-full rounded-sm focus:ring-1 ${error && error !== "" ? "focus:ring-red-500" : "focus:ring-primary"}`, className)}
@@ -16,6 +15,7 @@ const Inputbox = ({ label, type, id, className, divClassname, error, register, .
           {...inputProps} 
         />
       </div>
+      {error && error !== '' && <span className='text-xs text-red-500'>{error} *</span>}
      
     </div>
   )

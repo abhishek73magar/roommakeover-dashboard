@@ -23,7 +23,6 @@ const colnames = [
 
 const Orders = () => {
   const { data, isLoading, mutate } = orderApi.swrFetch()
-  
 
   const __orderMutate = (response, id) => {
     return response.reduce((prev, curr) => {
@@ -49,20 +48,24 @@ const Orders = () => {
 
   return (
     <section className='my-2'>
-      <BreadHeader  icon={<CiShoppingBasket />} title="Order List" subtitle="All product orders list are here." />
+      <BreadHeader  icon={<CiShoppingBasket />} title="Order List" subtitle="All product orders list are here." addNew='create' />
       
       <br />
       <Container>
         <GroupTable 
           colnames={colnames} 
-          data={data ? data.map((item) => {
-            const view = <Link to={item.id} className='hover:underline text-primary' >View</Link>
-            const orders = item.orders.map((item) => {
-              const total_price = item.qty * item.price
-              return { ...item, datetime: item.status_datetime, total_price }
-            })
-            return { ...item, view, orders, datetime: item.create_at }
-          }) : []} 
+          data={Array.isArray(data) ? data.reduce((prev, curr) => {
+            const id = `#${curr.id}`
+            const view = <Link to={curr.id} className='hover:underline text-primary' >View</Link>
+            if(Array.isArray(curr.orders)){
+              const orders = curr.orders.map((i) => {
+                const total_price = i.qty * i.price
+                return { ...i, datetime: i.status_datetime, total_price }
+              })
+              prev.push({ ...curr, id, view, orders, datetime: curr.create_at })
+            } else console.log(curr)
+            return prev;
+          }, []) : []} 
           isLoading={isLoading} 
           searchBy={['fullname', 'id']}
           subKey='orders'

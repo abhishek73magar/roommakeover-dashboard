@@ -64,3 +64,12 @@ export const invoiceUpdateForm = {
   invoice_status: '0',
   amount: ''
 }
+
+export const createOrderForm = {
+  fullname: "",
+  email: "",
+  phonenumber: "",
+  address: "",
+  other_details: "",
+  deliver_at: "1"
+}

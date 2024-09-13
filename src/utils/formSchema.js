@@ -67,3 +67,12 @@ export const transactionFormSchema = z.object({
   gateway: z.enum(['0', '1', '2', '3']),
   amount: z.number().min(1, { message: "Minimum amount is 1"})
 })
+
+export const createOrderFormSchema = z.object({
+  fullname: z.string().min(1, { message: "Fullname is required !!" }),
+  email: z.string().email({ message: "Invalid Email" }),
+  phonenumber: z.string(),
+  address: z.string().min(1, { message: "Address is required !!" }),
+  other_details: z.string(),
+  deliver_at: z.enum(['0', '1'])
+})

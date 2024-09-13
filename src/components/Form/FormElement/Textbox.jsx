@@ -7,7 +7,6 @@ const Textbox = ({ label, rows, id, className, divClassname, register, error, ..
   return (
     <div className={twMerge('w-full flex flex-col justify-start items-start gap-0.5 text-sm mb-2', divClassname)}>
       <label htmlFor={id} className='font-semibold'>{label}</label>
-      {error && error !== '' && <span className='text-xs text-red-500'>{error} *</span>}
       <textarea
         rows={rows || 3}
         className={twMerge('outline-none border px-2 py-2 w-full rounded-sm focus:ring-1 focus:ring-primary', className)}
@@ -15,6 +14,7 @@ const Textbox = ({ label, rows, id, className, divClassname, register, error, ..
         {...register}
         {...inputProps} 
       />
+      {error && error !== '' && <span className='text-xs text-red-500'>{error} *</span>}
     </div>
   )
 }

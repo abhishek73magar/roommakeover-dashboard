@@ -22,7 +22,6 @@ const Selectbox = ({ list, option, label, name, value, onChange, error, classNam
   return (
       <div className='flex flex-col justify-start items-start gap-0.5 w-full'>
         {label && <div className='text-sm font-semibold' onClick={() => setToggle(!toggle)}>{label}</div>}
-       {error && error !== '' && <span className='text-xs text-red-500'>{error} *</span>}
         <div className={twMerge('relative w-full border', divClassname)} ref={selectRef}>
           <button 
             type='button'
@@ -52,6 +51,7 @@ const Selectbox = ({ list, option, label, name, value, onChange, error, classNam
           </div>}
           
         </div>
+       {error && error !== '' && <span className='text-xs text-red-500'>{error} *</span>}
       </div>
   )
 }

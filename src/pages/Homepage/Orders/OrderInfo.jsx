@@ -129,6 +129,7 @@ const Info = ({ data, mutate, collection_id }) => {
   if(!data) return <DataNotFound />;
   return (
     <article className=''>
+      <div className="text-sm text-left mb-2">Created By: <b>{data.create_by ?? "RoomMakeOver"}</b></div>
       <div className="text-sm text-left mb-2">{moment(data.create_at).format('DD MMM YYYY || hh:mm a')}</div>
       <div className='grid md:grid-cols-7 gap-3'>
         <article className="col-span-7 md:col-span-5 overflow-auto">
@@ -305,5 +306,5 @@ const OrderStatus = ({ onChange, statusCode, order_id }) => {
 OrderStatus.propTypes = {
   onChange: propTypes.func,
   statusCode: propTypes.string,
-  order_id: propTypes.string
+  order_id: propTypes.number
 }
